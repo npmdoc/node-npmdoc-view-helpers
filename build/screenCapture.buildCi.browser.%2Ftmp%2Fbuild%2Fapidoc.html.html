@@ -1,0 +1,148 @@
+<html><head></head><body><div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a>view-helpers (v0.1.5)</a>
+</h1>
+<h4>View helper methods for expressjs and other node stuff</h4>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.view-helpers">module view-helpers</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.view-helpers.view-helpers">
+            function <span class="apidocSignatureSpan"></span>view-helpers
+            <span class="apidocSignatureSpan">(name)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.view-helpers" id="apidoc.module.view-helpers">module view-helpers</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.view-helpers.view-helpers" id="apidoc.element.view-helpers.view-helpers">
+        function <span class="apidocSignatureSpan"></span>view-helpers
+        <span class="apidocSignatureSpan">(name)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function helpers(name) {
+  return function (req, res, next) {
+    res.locals.appName = name || 'App'
+    res.locals.title = name || 'App'
+    res.locals.req = req
+    res.locals.isActive = function (link) {
+      if (link === '/' ) {
+        return req.url === '/' ? 'active' : ''
+      } else {
+        return req.url.indexOf(link) !== -1 ? 'active' : ''
+      }
+    }
+    res.locals.formatDate = formatDate
+    res.locals.formatDatetime = formatDatetime
+    res.locals.stripScript = stripScript
+    res.locals.createPagination = createPagination(req)
+
+    if (typeof req.flash !== 'undefined') {
+      res.locals.info = req.flash('info')
+      res.locals.errors = req.flash('error')
+      res.locals.success = req.flash('success')
+      res.locals.warning = req.flash('warning')
+    }
+
+<span class="apidocCodeCommentSpan">    /**
+     * Render mobile views
+     *
+     * If the request is coming from a mobile/tablet device, it will check if
+     * there is a .mobile.ext file and it that exists it tries to render it.
+     *
+     * Refer https://github.com/madhums/nodejs-express-mongoose-demo/issues/39
+     * For the implementation refer the above app
+     */
+</span>
+    // For backward compatibility check if `app` param has been passed
+    var ua = req.header('user-agent')
+    var fs = require('fs')
+
+    res._render = res.render
+    req.isMobile = /mobile/i.test(ua)
+
+    res.render = function (template, locals, cb) {
+      var view = template + '.mobile.' + req.app.get('view engine')
+      var file = req.app.get('views') + '/' + view
+
+      if (/mobile/i.test(ua) &amp;&amp; fs.existsSync(file)) {
+        res._render(view, locals, cb)
+      } else {
+        res._render(template, locals, cb)
+      }
+    }
+
+    next()
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
+</body></html>
